@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  column    String   @default("todo")
+  color     String   @default("#ffffff")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

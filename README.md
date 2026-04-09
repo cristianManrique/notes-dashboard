@@ -1,36 +1,260 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📋 Notes Dashboard — Kanban Board
 
-## Getting Started
+> A modern drag-and-drop Kanban board built with Next.js 15, TypeScript, Tailwind CSS and Redux Toolkit.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=flat&logo=nextdotjs)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-007ACC?style=flat&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-2-593D88?style=flat&logo=redux)
+![Jest](https://img.shields.io/badge/Jest-29-C21325?style=flat&logo=jest)
 
+---
+
+## ✨ Features
+
+- 📝 **Add, edit and delete notes** with title, content and color
+- 🗂️ **3-column Kanban board** — To Do · In Progress · Done
+- 🖱️ **Drag & Drop** between columns using dnd-kit
+- 🌙 **Dark / Light mode** toggle via Context API
+- 🔌 **REST API** built-in with Next.js Route Handlers
+- 💾 **Persistent storage** with Prisma + SQLite
+- 🧪 **Unit tests** with Jest + React Testing Library
+- 📱 **Fully responsive** — mobile, tablet, desktop
+- ⚡ **TypeScript strict** throughout
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript 5 (strict) |
+| Styling | Tailwind CSS v4 |
+| State Management | Redux Toolkit + Context API |
+| Drag & Drop | dnd-kit |
+| Database | Prisma + SQLite |
+| Testing | Jest + React Testing Library |
+| Deployment | Vercel |
+
+---
+
+## 🧠 Concepts Covered
+
+This project is designed to learn and demonstrate key front-end engineering concepts:
+
+| Concept | Implementation |
+|---------|---------------|
+| Redux Toolkit | Global notes state — actions, reducers, selectors |
+| Redux Thunk | Async API calls before dispatching actions |
+| Context API | Theme (dark/light) — simple global state |
+| REST API | Next.js Route Handlers — GET, POST, PUT, DELETE |
+| TypeScript | Strict typing — interfaces, unions, generics |
+| Tailwind CSS | Utility-first styling, dark mode, responsive |
+| Drag & Drop | dnd-kit — move notes between columns |
+| Jest + RTL | Unit tests for components and Redux slices |
+| Git workflow | Feature branches, PRs, conventional commits |
+| Next.js App Router | Layouts, pages, server/client components |
+
+---
+
+## 📁 Project Structure
+
+```
+notes-dashboard/
+├── app/
+│   ├── layout.tsx              # Root layout — ThemeProvider
+│   ├── page.tsx                # Dashboard page
+│   └── api/
+│       └── notes/
+│           ├── route.ts        # GET all notes, POST new note
+│           └── [id]/
+│               └── route.ts    # PUT update, DELETE note
+├── components/
+│   ├── Board/
+│   │   ├── NoteBoard.tsx       # Main board with 3 columns
+│   │   ├── NoteColumn.tsx      # Individual column (To Do, etc.)
+│   │   └── NoteCard.tsx        # Draggable note card
+│   ├── Forms/
+│   │   └── AddNoteForm.tsx     # Modal form to add a note
+│   └── UI/
+│       ├── ThemeToggle.tsx     # Dark/light mode button
+│       └── Header.tsx          # App header
+├── store/
+│   ├── store.ts                # Redux store configuration
+│   ├── notesSlice.ts           # Notes reducer + actions
+│   └── hooks.ts                # Typed useAppDispatch/useAppSelector
+├── context/
+│   └── ThemeContext.tsx        # Context API for theme
+├── types/
+│   └── index.ts                # TypeScript interfaces
+├── lib/
+│   └── prisma.ts               # Prisma client singleton
+├── prisma/
+│   └── schema.prisma           # Database schema
+├── __tests__/
+│   ├── NoteCard.test.tsx       # Component tests
+│   ├── AddNoteForm.test.tsx    # Form tests
+│   └── notesSlice.test.ts      # Redux slice tests
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repo
+```bash
+git clone https://github.com/cristianManrique/notes-dashboard.git
+cd notes-dashboard
+```
+
+### 2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Setup the database
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### 4. Run the dev server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🗄️ Database Schema
 
-## Learn More
+```prisma
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  column    String   @default("todo")
+  color     String   @default("#ffffff")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔌 API Routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/notes` | Fetch all notes |
+| POST | `/api/notes` | Create a new note |
+| PUT | `/api/notes/:id` | Update a note (title, content, column) |
+| DELETE | `/api/notes/:id` | Delete a note |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Running Tests
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Run all tests
+npm test
+
+# Watch mode
+npm run test:watch
+
+# Coverage report
+npm run test:coverage
+```
+
+---
+
+## 📦 Key Dependencies
+
+```json
+{
+  "next": "^15.0.0",
+  "react": "^18.3.0",
+  "typescript": "^5.0.0",
+  "tailwindcss": "^4.0.0",
+  "@reduxjs/toolkit": "^2.0.0",
+  "react-redux": "^9.0.0",
+  "@dnd-kit/core": "^6.0.0",
+  "@dnd-kit/sortable": "^8.0.0",
+  "@prisma/client": "^5.0.0",
+  "jest": "^29.0.0",
+  "@testing-library/react": "^14.0.0"
+}
+```
+
+---
+
+## 🎓 Learning Path
+
+This project was built step by step to learn modern front-end engineering.
+Goal: build the **complete skeleton first** — touches everything on Day 1, then add content layer by layer.
+
+---
+
+### ⚡ Week 1 — Full Skeleton (Interview-Ready)
+
+> Objective: a running app that demonstrates every concept — even with placeholders. Showable in an interview by Day 5.
+
+| Day | Focus | Deliverable |
+|-----|-------|-------------|
+| **Day 1** | Setup + Structure + TypeScript | Next.js + Tailwind running, all folders created, interfaces defined, dark layout |
+| **Day 2** | Redux + Context API | Store configured, notesSlice, ThemeToggle working, typed hooks |
+| **Day 3** | UI Components | NoteBoard + NoteColumn + NoteCard + AddNoteForm — hardcoded data, full Tailwind styling |
+| **Day 4** | REST API + Redux Thunk | Route Handlers GET/POST, async thunk fetching notes from API |
+| **Day 5** | Drag & Drop + 1-2 Tests | dnd-kit between columns, basic Jest test, pushed to GitHub ✅ |
+
+---
+
+### 📦 Week 2 — Real Data & CRUD
+
+- Prisma + SQLite — real persistence
+- PUT + DELETE Route Handlers
+- Edit note in place
+- Redux state synced with database
+
+---
+
+### 🎨 Week 3 — Polish & Mobile
+
+- Animations with Tailwind transitions
+- Full mobile responsive layout
+- Column note count badges
+- Empty state illustrations
+
+---
+
+### 🚀 Week 4 — Production Ready
+
+- Jest + RTL full test coverage
+- Vercel deployment
+- README final polish
+- Add to portfolio crisman.dev
+
+---
+
+## 🌐 Live Demo
+
+[notes-dashboard.vercel.app](https://notes-dashboard.vercel.app) *(coming soon)*
+
+---
+
+## 👤 Author
+
+**Cristian Manrique** — Front-End Developer · Designer
+🌐 [crisman.dev](https://crisman.dev) · 💼 [LinkedIn](https://linkedin.com/in/cristian-manrique)
+
+---
+
+*"The future of design & development is Human + AI"*
