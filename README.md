@@ -194,56 +194,6 @@ npm run test:coverage
 }
 ```
 
----
-
-## 🎓 Learning Path
-
-This project was built step by step to learn modern front-end engineering.
-Goal: build the **complete skeleton first** — touches everything on Day 1, then add content layer by layer.
-
----
-
-### ⚡ Week 1 — Full Skeleton (Interview-Ready)
-
-> Objective: a running app that demonstrates every concept — even with placeholders. Showable in an interview by Day 5.
-
-| Day | Focus | Deliverable |
-|-----|-------|-------------|
-| **Day 1** | Setup + Structure + TypeScript | Next.js + Tailwind running, all folders created, interfaces defined, dark layout |
-| **Day 2** | Redux + Context API | Store configured, notesSlice, ThemeToggle working, typed hooks |
-| **Day 3** | UI Components | NoteBoard + NoteColumn + NoteCard + AddNoteForm — hardcoded data, full Tailwind styling |
-| **Day 4** | REST API + Redux Thunk | Route Handlers GET/POST, async thunk fetching notes from API |
-| **Day 5** | Drag & Drop + 1-2 Tests | dnd-kit between columns, basic Jest test, pushed to GitHub ✅ |
-
----
-
-### 📦 Week 2 — Real Data & CRUD
-
-- Prisma + SQLite — real persistence
-- PUT + DELETE Route Handlers
-- Edit note in place
-- Redux state synced with database
-
----
-
-### 🎨 Week 3 — Polish & Mobile
-
-- Animations with Tailwind transitions
-- Full mobile responsive layout
-- Column note count badges
-- Empty state illustrations
-
----
-
-### 🚀 Week 4 — Production Ready
-
-- Jest + RTL full test coverage
-- Vercel deployment
-- README final polish
-- Add to portfolio crisman.dev
-
----
-
 ## 🌐 Live Demo
 
 [notes-dashboard.vercel.app](https://notes-dashboard.vercel.app) *(coming soon)*
