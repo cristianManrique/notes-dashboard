@@ -1,16 +1,16 @@
 'use client'
 
-import { useState } from 'react'
-import { useAppDispatch } from '@/store/hooks'
-import { createNote } from '@/store/notesSlice'
+import { useState } from 'react';
+import { useAppDispatch } from '@/store/hooks';
+import { createNote } from '@/store/notesSlice';
 
-const COLORS = ['#fef9c3', '#dcfce7', '#dbeafe', '#fce7f3', '#f3e8ff']
+const COLORS = ['#fef9c3', '#dcfce7', '#dbeafe', '#fce7f3', '#f3e8ff'];
 
 export default function AddNoteForm() {
-  const dispatch = useAppDispatch()
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [color, setColor] = useState(COLORS[0])
+  const dispatch = useAppDispatch();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [color, setColor] = useState(COLORS[0]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
