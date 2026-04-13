@@ -1,37 +1,40 @@
-# 📋 Notes Dashboard — Kanban Board
+# Notes Dashboard — Kanban Board
 
-> A modern drag-and-drop Kanban board built with Next.js 15, TypeScript, Tailwind CSS and Redux Toolkit.
+> A full-screen drag-and-drop Kanban board built with Next.js 16, TypeScript, Tailwind CSS v4, Redux Toolkit and Axios.
 
-![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=flat&logo=nextdotjs)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat&logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-007ACC?style=flat&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 ![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-2-593D88?style=flat&logo=redux)
-![Jest](https://img.shields.io/badge/Jest-29-C21325?style=flat&logo=jest)
+![Axios](https://img.shields.io/badge/Axios-1-5A29E4?style=flat&logo=axios)
+![Jest](https://img.shields.io/badge/Jest-30-C21325?style=flat&logo=jest)
 
 ---
 
-## ✨ Features
+## Features
 
-- 📝 **Add, edit and delete notes** with title, content and color
-- 🗂️ **3-column Kanban board** — To Do · In Progress · Done
-- 🖱️ **Drag & Drop** between columns using dnd-kit
-- 🌙 **Dark / Light mode** toggle via Context API
-- 🔌 **REST API** built-in with Next.js Route Handlers
-- 💾 **Persistent storage** with Prisma + SQLite
-- 🧪 **Unit tests** with Jest + React Testing Library
-- 📱 **Fully responsive** — mobile, tablet, desktop
-- ⚡ **TypeScript strict** throughout
+- **3-column Kanban board** — To Do · In Progress · Done
+- **Right-side drawer** — slide-in panel to add notes without leaving the board
+- **Note cards** — title, content, color, column selector, live preview
+- **Dark / Light mode** toggle via Context API
+- **REST API** built with Next.js Route Handlers
+- **Axios API layer** — typed helpers `apiGet`, `apiPost`, `apiPut`, `apiPatch`, `apiDelete`
+- **Persistent storage** with Prisma + SQLite *(Week 2)*
+- **Drag & Drop** between columns using dnd-kit *(Week 1 Day 5)*
+- **Unit tests** with Jest + React Testing Library
+- **TypeScript strict** throughout
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Next.js 15 (App Router) |
+| Framework | Next.js 16 (App Router) |
 | Language | TypeScript 5 (strict) |
 | Styling | Tailwind CSS v4 |
 | State Management | Redux Toolkit + Context API |
+| HTTP Client | Axios |
 | Drag & Drop | dnd-kit |
 | Database | Prisma + SQLite |
 | Testing | Jest + React Testing Library |
@@ -39,32 +42,30 @@
 
 ---
 
-## 🧠 Concepts Covered
-
-This project is designed to learn and demonstrate key front-end engineering concepts:
+## Concepts Covered
 
 | Concept | Implementation |
 |---------|---------------|
 | Redux Toolkit | Global notes state — actions, reducers, selectors |
-| Redux Thunk | Async API calls before dispatching actions |
+| Redux Thunk | Async API calls (`fetchNotes`, `createNote`, `updateNote`, `deleteNote`) |
 | Context API | Theme (dark/light) — simple global state |
+| Axios | Typed API layer with interceptors — `lib/Api.ts` |
 | REST API | Next.js Route Handlers — GET, POST, PUT, DELETE |
-| TypeScript | Strict typing — interfaces, unions, generics |
-| Tailwind CSS | Utility-first styling, dark mode, responsive |
+| TypeScript | Strict typing — interfaces, unions, generics, `ReturnType<>` |
+| Tailwind CSS v4 | Utility-first styling, dark mode, animations |
 | Drag & Drop | dnd-kit — move notes between columns |
 | Jest + RTL | Unit tests for components and Redux slices |
-| Git workflow | Feature branches, PRs, conventional commits |
-| Next.js App Router | Layouts, pages, server/client components |
+| Next.js App Router | Layouts, pages, server/client components, `StoreProvider` pattern |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 notes-dashboard/
 ├── app/
-│   ├── layout.tsx              # Root layout — ThemeProvider
-│   ├── page.tsx                # Dashboard page
+│   ├── layout.tsx              # Root layout — StoreProvider + ThemeProvider
+│   ├── page.tsx                # Dashboard — manages drawer open state
 │   └── api/
 │       └── notes/
 │           ├── route.ts        # GET all notes, POST new note
@@ -72,36 +73,38 @@ notes-dashboard/
 │               └── route.ts    # PUT update, DELETE note
 ├── components/
 │   ├── Board/
-│   │   ├── NoteBoard.tsx       # Main board with 3 columns
-│   │   ├── NoteColumn.tsx      # Individual column (To Do, etc.)
-│   │   └── NoteCard.tsx        # Draggable note card
+│   │   ├── NoteBoard.tsx       # Full-screen board, dispatches fetchNotes
+│   │   ├── NoteColumn.tsx      # Column with accent, counter, skeleton, empty state
+│   │   └── NoteCard.tsx        # Colored card with hover animation
 │   ├── Forms/
-│   │   └── AddNoteForm.tsx     # Modal form to add a note
+│   │   └── NoteFormDrawer.tsx  # Slide-in right drawer — add note form
+│   ├── StoreProvider.tsx       # Client wrapper for Redux <Provider>
 │   └── UI/
 │       ├── ThemeToggle.tsx     # Dark/light mode button
-│       └── Header.tsx          # App header
+│       └── Header.tsx          # App header + "New Note" button
 ├── store/
-│   ├── store.ts                # Redux store configuration
-│   ├── notesSlice.ts           # Notes reducer + actions
-│   └── hooks.ts                # Typed useAppDispatch/useAppSelector
+│   ├── store.ts                # Redux store — RootState, AppDispatch
+│   ├── notesSlice.ts           # Notes reducer + 4 async thunks via Axios
+│   └── hooks.ts                # Typed useAppDispatch / useAppSelector
 ├── context/
 │   └── ThemeContext.tsx        # Context API for theme
-├── types/
-│   └── index.ts                # TypeScript interfaces
 ├── lib/
+│   ├── Api.ts                  # Axios instance + apiGet/Post/Put/Patch/Delete
 │   └── prisma.ts               # Prisma client singleton
+├── types/
+│   └── index.ts                # Note, NotesState, Column interfaces
 ├── prisma/
-│   └── schema.prisma           # Database schema
-├── __tests__/
-│   ├── NoteCard.test.tsx       # Component tests
-│   ├── AddNoteForm.test.tsx    # Form tests
-│   └── notesSlice.test.ts      # Redux slice tests
-└── README.md
+│   └── schema.prisma           # Note model
+├── scripts/
+│   └── start.js                # Dev server + auto-open browser (cross-platform)
+└── __tests__/
+    ├── NoteCard.test.tsx
+    └── notesSlice.test.ts
 ```
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the repo
 ```bash
@@ -111,29 +114,28 @@ cd notes-dashboard
 
 ### 2. Install dependencies
 ```bash
-npm install
-# or
 yarn install
 ```
 
-### 3. Setup the database
+### 3. Start dev server + open browser
+```bash
+yarn start
+```
+
+The browser opens automatically at [http://localhost:3000](http://localhost:3000).
+
+> For dev only (no auto-open): `yarn dev`
+
+---
+
+## Database Setup *(Week 2)*
+
 ```bash
 npx prisma generate
 npx prisma db push
 ```
 
-### 4. Run the dev server
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## 🗄️ Database Schema
+Schema — `prisma/schema.prisma`:
 
 ```prisma
 model Note {
@@ -150,60 +152,84 @@ model Note {
 
 ---
 
-## 🔌 API Routes
+## API Routes
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/notes` | Fetch all notes |
-| POST | `/api/notes` | Create a new note |
-| PUT | `/api/notes/:id` | Update a note (title, content, column) |
-| DELETE | `/api/notes/:id` | Delete a note |
+| Method | Endpoint | Thunk | Description |
+|--------|----------|-------|-------------|
+| GET | `/api/notes` | `fetchNotes` | Fetch all notes |
+| POST | `/api/notes` | `createNote` | Create a new note |
+| PUT | `/api/notes/:id` | `updateNote` | Update a note |
+| DELETE | `/api/notes/:id` | `deleteNote` | Delete a note |
+
+All requests go through the Axios layer in `lib/Api.ts`.
 
 ---
 
-## 🧪 Running Tests
+## API Layer — `lib/Api.ts`
+
+```ts
+apiGet<T>(url)              // GET
+apiPost<T, B>(url, body)    // POST
+apiPut<T, B>(url, body)     // PUT
+apiPatch<T, B>(url, body)   // PATCH
+apiDelete<T>(url)           // DELETE
+```
+
+Centralised error handling via `interceptors.response`. Auth token injection ready in `interceptors.request`.
+
+---
+
+## Running Tests
 
 ```bash
-# Run all tests
-npm test
-
-# Watch mode
-npm run test:watch
-
-# Coverage report
-npm run test:coverage
+yarn test
+yarn test:watch
+yarn test:coverage
 ```
 
 ---
 
-## 📦 Key Dependencies
+## Roadmap
 
-```json
-{
-  "next": "^15.0.0",
-  "react": "^18.3.0",
-  "typescript": "^5.0.0",
-  "tailwindcss": "^4.0.0",
-  "@reduxjs/toolkit": "^2.0.0",
-  "react-redux": "^9.0.0",
-  "@dnd-kit/core": "^6.0.0",
-  "@dnd-kit/sortable": "^8.0.0",
-  "@prisma/client": "^5.0.0",
-  "jest": "^29.0.0",
-  "@testing-library/react": "^14.0.0"
-}
-```
+### Week 1 — Skeleton (current)
+- [x] Next.js 16 + TypeScript + Tailwind v4 setup
+- [x] Redux store + notesSlice + typed hooks
+- [x] Context API — dark/light theme
+- [x] Full-screen Kanban board UI
+- [x] Right-side drawer to add notes
+- [x] REST API Route Handlers (mock)
+- [x] Axios API layer
+- [x] Jest skeleton tests
+- [ ] Drag & Drop with dnd-kit *(Day 5)*
 
-## 🌐 Live Demo
+### Week 2 — Real Data
+- [ ] Prisma + SQLite persistence
+- [ ] Edit note in place
+- [ ] Full CRUD synced with DB
+
+### Week 3 — Polish
+- [ ] Drag & Drop animations
+- [ ] Mobile responsive layout
+- [ ] Column note count badges
+- [ ] Empty state illustrations
+
+### Week 4 — Production
+- [ ] Full Jest + RTL coverage
+- [ ] Vercel deployment
+- [ ] Add to portfolio crisman.dev
+
+---
+
+## Live Demo
 
 [notes-dashboard.vercel.app](https://notes-dashboard.vercel.app) *(coming soon)*
 
 ---
 
-## 👤 Author
+## Author
 
 **Cristian Manrique** — Front-End Developer · Designer
-🌐 [crisman.dev](https://crisman.dev) · 💼 [LinkedIn](https://linkedin.com/in/cristian-manrique)
+[crisman.dev](https://crisman.dev) · [LinkedIn](https://linkedin.com/in/cristian-manrique)
 
 ---
 
