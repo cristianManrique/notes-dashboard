@@ -1,23 +1,34 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { Note, NotesState, Column } from '@/types'
+import { apiGet, apiPost, apiPut, apiDelete } from '@/lib/Api'
 
-// Async thunks (Week 1 Day 4)
-export const fetchNotes = createAsyncThunk('notes/fetchAll', async () => {
-  const res = await fetch('/api/notes')
-  return (await res.json()) as Note[]
-})
+// ─── Async Thunks ─────────────────────────────────────────────────────────
+
+export const fetchNotes = createAsyncThunk('notes/fetchAll', async () =>
+  apiGet<Note[]>('/notes')
+)
 
 export const createNote = createAsyncThunk(
   'notes/create',
-  async (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt' | 'order'>) => {
-    const res = await fetch('/api/notes', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(note),
-    })
-    return (await res.json()) as Note
+  async (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt' | 'order'>) =>
+    apiPost<Note>('/notes', note)
+)
+
+export const updateNote = createAsyncThunk(
+  'notes/update',
+  async ({ id, ...changes }: Partial<Note> & { id: string }) =>
+    apiPut<Note>(`/notes/${id}`, changes)
+)
+
+export const deleteNote = createAsyncThunk(
+  'notes/delete',
+  async (id: string) => {
+    await apiDelete(`/notes/${id}`)
+    return id
   }
 )
+
+// ─── Slice ────────────────────────────────────────────────────────────────
 
 const initialState: NotesState = {
   notes: [],
@@ -36,6 +47,7 @@ const notesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // fetchNotes
       .addCase(fetchNotes.pending, (state) => { state.status = 'loading' })
       .addCase(fetchNotes.fulfilled, (state, action) => {
         state.status = 'succeeded'
@@ -45,8 +57,18 @@ const notesSlice = createSlice({
         state.status = 'failed'
         state.error = action.error.message ?? 'Unknown error'
       })
+      // createNote
       .addCase(createNote.fulfilled, (state, action) => {
         state.notes.push(action.payload)
+      })
+      // updateNote
+      .addCase(updateNote.fulfilled, (state, action) => {
+        const idx = state.notes.findIndex((n) => n.id === action.payload.id)
+        if (idx !== -1) state.notes[idx] = action.payload
+      })
+      // deleteNote
+      .addCase(deleteNote.fulfilled, (state, action) => {
+        state.notes = state.notes.filter((n) => n.id !== action.payload)
       })
   },
 })
