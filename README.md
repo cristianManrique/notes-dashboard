@@ -114,6 +114,57 @@ All calls go through `lib/Api.ts` — one Axios instance, one error handler.
 ### 🔲 Step 4 — Edit & Delete
 - Edit a note in place
 - Delete button on cards
+=======
+## Running Tests
+
+```bash
+yarn test
+yarn test:watch
+yarn test:coverage
+```
+
+---
+
+## Roadmap
+
+### Week 1 — Skeleton (current)
+- [x] Next.js 16 + TypeScript + Tailwind v4 setup
+- [x] Redux store + notesSlice + typed hooks
+- [x] Context API — dark/light theme
+- [x] Full-screen Kanban board UI
+- [x] Right-side drawer to add notes
+- [x] REST API Route Handlers (mock)
+- [x] Axios API layer
+- [x] Jest skeleton tests
+- [ ] Drag & Drop with dnd-kit *(Day 5)*
+
+### Week 2 — Real Data
+- [ ] Prisma + SQLite persistence
+- [ ] Edit note in place
+- [ ] Full CRUD synced with DB
+
+### Week 3 — Polish
+- [ ] Drag & Drop animations
+- [ ] Mobile responsive layout
+- [ ] Column note count badges
+- [ ] Empty state illustrations
+
+### Week 4 — Production
+- [ ] Full Jest + RTL coverage
+- [ ] Vercel deployment
+- [ ] Add to portfolio crisman.dev
+
+---
+## Screenshot
+
+<img width="1457" height="856" alt="image" src="https://github.com/user-attachments/assets/03a6db3d-ad1e-48ac-a401-07196de35422" />
+
+
+---
+
+## Live Demo
+
+[notes-dashboard.vercel.app](https://notes-dashboard.vercel.app) *(coming soon)*
 
 ---
 
