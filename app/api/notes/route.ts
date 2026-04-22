@@ -12,6 +12,16 @@ const mockNotes = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
+  {
+    id: '2',
+    title: 'Second note',
+    content: 'Hello again!',
+    column: 'todo',
+    color: '#dbeafe',
+    order: 1,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+},
 ]
 
 export async function GET() {

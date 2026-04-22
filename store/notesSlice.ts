@@ -1,24 +1,25 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { Note, NotesState, Column } from '@/types'
-import { apiGet, apiPost, apiPut, apiDelete } from '@/lib/Api'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { Note, NotesState, Column } from '@/types';
+import { apiGet, apiPost, apiPut, apiDelete } from '@/lib/Api';
+import { arrayMove } from '@dnd-kit/sortable'
 
 // ─── Async Thunks ─────────────────────────────────────────────────────────
 
 export const fetchNotes = createAsyncThunk('notes/fetchAll', async () =>
   apiGet<Note[]>('/notes')
-)
+);
 
 export const createNote = createAsyncThunk(
   'notes/create',
   async (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt' | 'order'>) =>
     apiPost<Note>('/notes', note)
-)
+);
 
 export const updateNote = createAsyncThunk(
   'notes/update',
   async ({ id, ...changes }: Partial<Note> & { id: string }) =>
     apiPut<Note>(`/notes/${id}`, changes)
-)
+);
 
 export const deleteNote = createAsyncThunk(
   'notes/delete',
@@ -26,7 +27,7 @@ export const deleteNote = createAsyncThunk(
     await apiDelete(`/notes/${id}`)
     return id
   }
-)
+);
 
 // ─── Slice ────────────────────────────────────────────────────────────────
 
@@ -34,7 +35,7 @@ const initialState: NotesState = {
   notes: [],
   status: 'idle',
   error: null,
-}
+};
 
 const notesSlice = createSlice({
   name: 'notes',
@@ -43,6 +44,13 @@ const notesSlice = createSlice({
     moveNote(state, action: PayloadAction<{ id: string; column: Column }>) {
       const note = state.notes.find((n) => n.id === action.payload.id)
       if (note) note.column = action.payload.column
+    },
+    reorderNotes(state, action: PayloadAction<{ column: Column; oldIndex: number; newIndex: number }>) {
+      const { column, oldIndex, newIndex } = action.payload
+      const columnNotes = state.notes.filter((n) => n.column === column)
+      const otherNotes = state.notes.filter((n) => n.column !== column)
+      const reordered = arrayMove(columnNotes, oldIndex, newIndex)
+      state.notes = [...otherNotes, ...reordered]
     },
   },
   extraReducers: (builder) => {
@@ -71,7 +79,7 @@ const notesSlice = createSlice({
         state.notes = state.notes.filter((n) => n.id !== action.payload)
       })
   },
-})
+});
 
-export const { moveNote } = notesSlice.actions
-export default notesSlice.reducer
+export const { moveNote, reorderNotes } = notesSlice.actions;
+export default notesSlice.reducer;

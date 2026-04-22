@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
-import { Vend_Sans } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/context/ThemeContext'
 import StoreProvider from '@/components/StoreProvider'
+import { ThemeProvider } from '@/context/ThemeContext'
 
-const vendSans = Vend_Sans({
-  variable: '--font-vend-sans',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
-  weight: 'variable',
   display: 'swap',
 })
 
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${vendSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} h-full`}>
       <body className="h-full overflow-hidden font-sans">
         <StoreProvider>
           <ThemeProvider>
