@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/** Tailwind CSS base styles,
+    applying Dark mode variants to all
+    elements with the .dark class or its descendants.
+*/
+@variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --font-sans: var(--font-vend-sans);
 }

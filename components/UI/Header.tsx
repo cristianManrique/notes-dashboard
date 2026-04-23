@@ -8,10 +8,10 @@ interface HeaderProps {
 
 export default function Header({ onAddNote }: HeaderProps) {
   return (
-    <header className="flex items-center justify-between px-6 py-3 border-b border-zinc-800 bg-zinc-900 shrink-0">
+    <header className="flex items-center justify-between px-6 py-3 border-b border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 shrink-0">
       <div className="flex items-center gap-3">
         <div className="w-2 h-2 rounded-full bg-blue-500" />
-        <h1 className="text-sm font-semibold tracking-tight text-zinc-100">
+        <h1 className="text-sm font-semibold tracking-tight text-zinc-700 dark:text-zinc-100">
           Notes Dashboard
         </h1>
       </div>

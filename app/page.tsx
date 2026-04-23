@@ -9,7 +9,7 @@ export default function DashboardPage() {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   return (
-    <div className="flex flex-col h-screen bg-zinc-950 overflow-hidden">
+    <div className="flex flex-col h-screen bg-zinc-100 dark:bg-zinc-950 overflow-hidden">
       <Header onAddNote={() => setDrawerOpen(true)} />
       <NoteBoard />
       <NoteFormDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />

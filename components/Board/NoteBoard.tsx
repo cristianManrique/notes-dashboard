@@ -95,7 +95,7 @@ export default function NoteBoard() {
       <DragOverlay>
       {activeNote && (
         <div
-          className="rounded-lg p-3 shadow-xl rotate-2 cursor-grabbing border border-black/10"
+          className="rounded-lg p-3 shadow-xl ring-1 ring-zinc-200 dark:ring-zinc-700 rotate-2 cursor-grabbing border border-black/10"
           style={{ backgroundColor: activeNote.color }}
         >
           <h3 className="font-semibold text-xs text-zinc-800 leading-snug mb-1">
@@ -111,7 +111,7 @@ export default function NoteBoard() {
     </DragOverlay>
 
       {/* DndContext provides drag-and-drop capabilities to all child components */}
-      <div className="flex flex-1 gap-3 p-4 overflow-hidden">
+      <div className="flex flex-1 gap-3 p-4 overflow-hidden bg-zinc-100 dark:bg-zinc-950">
         {COLUMNS.map((col) => (
           <NoteColumn
             key={col.id}

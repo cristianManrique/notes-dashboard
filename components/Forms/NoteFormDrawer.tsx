@@ -55,23 +55,23 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/30 dark:bg-black/50 z-40 transition-opacity duration-300 ${
           open ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
       />
 
       {/* Drawer */}
       <aside
-        className={`fixed top-0 right-0 h-full w-80 bg-zinc-900 border-l border-zinc-800 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-80 border-l bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Drawer header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
-          <h2 className="text-sm font-semibold text-zinc-100">New Note</h2>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 dark:border-zinc-800">
+          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">New Note</h2>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
             aria-label="Close"
           >
             ✕
@@ -83,7 +83,7 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
 
           {/* Title */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Title</label>
+            <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Title</label>
             <input
               type="text"
               placeholder="Note title..."
@@ -91,25 +91,28 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
               onChange={(e) => setTitle(e.target.value)}
               autoFocus
               required
-              className="w-full rounded-md bg-zinc-800 border border-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+             className="w-full rounded-md bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700
+             text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 px-3 py-2 text-sm outline-none
+             focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
             />
           </div>
 
           {/* Content */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Content</label>
+            <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Content</label>
             <textarea
               placeholder="Write something..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={5}
-              className="w-full rounded-md bg-zinc-800 border border-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition resize-none"
-            />
+              className="w-full rounded-md bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700
+              text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 px-3 py-2 text-sm outline-none
+              focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition resize-none"            />
           </div>
 
           {/* Column */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Column</label>
+            <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Column</label>
             <div className="flex gap-2">
               {COLUMNS.map((col) => (
                 <button
@@ -119,7 +122,7 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
                   className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors border ${
                     column === col.value
                       ? 'bg-blue-600 border-blue-500 text-white'
-                      : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:text-zinc-200'
+                      : 'bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
                   }`}
                 >
                   {col.label}
@@ -130,7 +133,7 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
 
           {/* Color */}
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Color</label>
+            <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Color</label>
             <div className="flex gap-2.5">
               {COLORS.map((c) => (
                 <button
@@ -150,13 +153,13 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
           {/* Preview */}
           {title && (
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Preview</label>
+              <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Preview</label>
               <div
-                className="rounded-lg p-3 border border-zinc-700"
+                className="rounded-lg p-3 border border-zinc-200 dark:border-zinc-800"
                 style={{ backgroundColor: color }}
               >
-                <p className="text-xs font-semibold text-zinc-800">{title}</p>
-                {content && <p className="text-xs text-zinc-600 mt-1 line-clamp-2">{content}</p>}
+                <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-100">{title}</p>
+                {content && <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 line-clamp-2">{content}</p>}
               </div>
             </div>
           )}

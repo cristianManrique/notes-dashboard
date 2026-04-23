@@ -25,11 +25,11 @@ export default function NoteCard({ note }: NoteCardProps) {
       className="rounded-lg p-3 cursor-grab border border-black/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150"
       style={{ backgroundColor: note.color, opacity: isDragging ? 0.4 : 1 }}
     >
-      <h3 className="font-semibold text-xs text-zinc-800 leading-snug mb-1">
+      <h3 className="font-semibold text-xs text-zinc-700 dark:text-zinc-800 leading-snug mb-1">
         {note.title}
       </h3>
       {note.content && (
-        <p className="text-xs text-zinc-600 line-clamp-3 leading-relaxed">
+        <p className="text-xs text-zinc-500 dark:text-zinc-600 line-clamp-3 leading-relaxed">
           {note.content}
         </p>
       )}
