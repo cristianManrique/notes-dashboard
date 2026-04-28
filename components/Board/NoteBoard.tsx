@@ -19,7 +19,7 @@ const COLUMNS: { id: Column; label: string }[] = [
   { id: 'done', label: 'Done' },
 ]
 
-export default function NoteBoard() {
+export default function NoteBoard( { onEditNote }: { onEditNote: (note: Note) => void }) {
   const dispatch = useAppDispatch()
 
    useEffect(() => {
@@ -119,6 +119,7 @@ export default function NoteBoard() {
             label={col.label}
             notes={notes.filter((n) => n.column === col.id)}
             loading={status === 'loading'}
+            onEditNote={onEditNote}
           />
         ))}
       </div>

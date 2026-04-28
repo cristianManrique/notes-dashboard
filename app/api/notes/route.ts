@@ -1,28 +1,5 @@
 import { NextResponse } from 'next/server'
-
-// TODO Week 2 — replace with Prisma queries
-const mockNotes = [
-  {
-    id: '1',
-    title: 'First note',
-    content: 'Hello Kanban!',
-    column: 'todo',
-    color: '#fef9c3',
-    order: 0,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    title: 'Second note',
-    content: 'Hello again!',
-    column: 'todo',
-    color: '#dbeafe',
-    order: 1,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-},
-]
+import { mockNotes } from './data'
 
 export async function GET() {
   return NextResponse.json(mockNotes)

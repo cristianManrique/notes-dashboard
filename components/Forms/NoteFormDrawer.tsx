@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useAppDispatch } from '@/store/hooks'
-import { createNote } from '@/store/notesSlice'
-import { Column } from '@/types'
+import { createNote, updateNote } from '@/store/notesSlice'
+import { Column, Note } from '@/types'
 
 const COLORS = [
   { hex: '#fef9c3', label: 'Yellow' },
@@ -25,7 +25,7 @@ interface NoteFormDrawerProps {
   onClose: () => void
 }
 
-export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
+export default function NoteFormDrawer({ open, onClose, note }: NoteFormDrawerProps & { note: Note | null }) {
   const dispatch = useAppDispatch()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -39,10 +39,35 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
+  useEffect(() => {
+    if (note) {
+      setTitle(note.title)
+      setContent(note.content)
+      setColor(note.color)
+      setColumn(note.column)
+    } else {
+      setTitle('')
+      setContent('')
+      setColor(COLORS[0].hex)
+      setColumn('todo')
+    }
+  }, [note])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
-    dispatch(createNote({ title, content, column, color }))
+
+    /**
+     * If `note` prop is provided, we're editing an existing note;
+     * otherwise, we're creating a new one.
+     */
+    if (note) {
+      dispatch(updateNote({ ...note, title, content, column, color }))
+    } else {
+      dispatch(createNote({ title, content, column, color }))
+    }
+
+    // Reset form and close drawer
     setTitle('')
     setContent('')
     setColor(COLORS[0].hex)
@@ -68,7 +93,7 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
       >
         {/* Drawer header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 dark:border-zinc-800">
-          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">New Note</h2>
+          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{note ? 'Edit Note' : 'New Note'}</h2>
           <button
             onClick={onClose}
             className="w-7 h-7 flex items-center justify-center rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
@@ -172,7 +197,7 @@ export default function NoteFormDrawer({ open, onClose }: NoteFormDrawerProps) {
             type="submit"
             className="w-full py-2.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors"
           >
-            Add Note
+            {note ? 'Save Changes' : 'Add Note'}
           </button>
         </form>
       </aside>

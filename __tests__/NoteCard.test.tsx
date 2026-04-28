@@ -1,6 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import NoteCard from '@/components/Board/NoteCard'
 import { Note } from '@/types'
+import { Provider } from 'react-redux'
+import { store } from '@/store/store'
+import { DndContext } from '@dnd-kit/core'
 
 const mockNote: Note = {
   id: '1',
@@ -15,12 +18,24 @@ const mockNote: Note = {
 
 describe('NoteCard', () => {
   it('renders the note title', () => {
-    render(<NoteCard note={mockNote} />)
+    render(
+      <DndContext>
+        <Provider store={store}>
+          <NoteCard note={mockNote} onEditNote={jest.fn()} />
+        </Provider>
+      </DndContext>
+    )
     expect(screen.getByText('Test Note')).toBeInTheDocument()
   })
 
   it('renders the note content', () => {
-    render(<NoteCard note={mockNote} />)
+    render(
+      <DndContext>
+        <Provider store={store}>
+          <NoteCard note={mockNote} onEditNote={jest.fn()} />
+        </Provider>
+      </DndContext>
+    )
     expect(screen.getByText('Test content')).toBeInTheDocument()
   })
 })

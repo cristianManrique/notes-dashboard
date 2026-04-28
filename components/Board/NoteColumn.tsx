@@ -16,9 +16,10 @@ interface NoteColumnProps {
   label: string
   notes: Note[]
   loading?: boolean
+  onEditNote: (note: Note) => void
 }
 
-export default function NoteColumn({ column, label, notes, loading }: NoteColumnProps) {
+export default function NoteColumn({ column, label, notes, loading, onEditNote }: NoteColumnProps) {
   // useDndContext gives us access to the current drag state,
   // including which element is being dragged and which droppable
   // area it's currently over (if any).
@@ -32,12 +33,12 @@ export default function NoteColumn({ column, label, notes, loading }: NoteColumn
 
   return (
     <div
-    className={`
-      flex flex-col flex-1 min-w-0 bg-white dark:bg-zinc-900
-      rounded-xl border
-       ${isActive ? 'border-blue-500' : 'border-zinc-800'}
-       overflow-hidden
-      `}
+      className={`
+        flex flex-col flex-1 min-w-0 bg-white dark:bg-zinc-900
+        rounded-xl border
+        ${isActive ? 'border-blue-500' : 'border-zinc-800'}
+        overflow-hidden
+        `}
     >
 
       {/* Column header */}
@@ -78,7 +79,7 @@ export default function NoteColumn({ column, label, notes, loading }: NoteColumn
           strategy={verticalListSortingStrategy}
         >
           {notes.map((note) => (
-            <NoteCard key={note.id} note={note} />
+            <NoteCard key={note.id} note={note} onEditNote={onEditNote} />
           ))}
         </SortableContext>
       </div>

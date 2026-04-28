@@ -7,6 +7,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 ![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-2-593D88?style=flat&logo=redux)
 ![Axios](https://img.shields.io/badge/Axios-1-5A29E4?style=flat&logo=axios)
+![Jest](https://img.shields.io/badge/Jest-30-C21325?style=flat&logo=jest)
 
 ---
 
@@ -14,7 +15,7 @@
 
 A Kanban board with 3 columns — **To Do**, **In Progress**, **Done**.
 
-Each step of the project introduces one new concept. Nothing is added until it is understood.
+Each step introduces one new concept. Nothing is added until it is understood.
 
 ---
 
@@ -27,8 +28,23 @@ Each step of the project introduces one new concept. Nothing is added until it i
 | Styling | Tailwind CSS v4 |
 | State | Redux Toolkit |
 | HTTP | Axios |
-| Drag & Drop | dnd-kit *(next step)* |
-| Database | Prisma + SQLite *(later)* |
+| Drag & Drop | dnd-kit |
+| Theme | Context API |
+| Testing | Jest + React Testing Library |
+| Database | Prisma + SQLite *(Phase 2)* |
+
+---
+
+## Features
+
+- **3-column Kanban board** — To Do · In Progress · Done
+- **Drag & Drop** — move cards between columns + reorder within a column
+- **Add note** — slide-in right drawer with title, content, color, column picker, live preview
+- **Edit note** — click ✏ on any card to edit in the drawer
+- **Delete note** — click ✕ on any card with confirmation dialog
+- **Dark / Light mode** — toggle via Context API + Tailwind v4 `@variant dark`
+- **REST API** — Next.js Route Handlers (mock in-memory, Phase 2 → Prisma)
+- **Unit tests** — Jest + React Testing Library
 
 ---
 
@@ -36,37 +52,47 @@ Each step of the project introduces one new concept. Nothing is added until it i
 
 ```
 app/
-  layout.tsx                 Root layout — StoreProvider wraps everything
-  page.tsx                   Only page — owns drawerOpen state
+  layout.tsx                   Root layout — StoreProvider + ThemeProvider
+  page.tsx                     Only page — owns drawerOpen + editingNote state
+  globals.css                  Tailwind v4 config + @variant dark
   api/notes/
-    route.ts                 GET all notes + POST new note (mock)
-    [id]/route.ts            PUT update + DELETE note (placeholder)
+    data.ts                    Shared mock data — globalThis singleton
+    route.ts                   GET all notes + POST new note
+    [id]/route.ts              PUT update + DELETE note
 
 components/
-  StoreProvider.tsx          Redux Provider wrapper
+  StoreProvider.tsx            Redux Provider wrapper
   Board/
-    NoteBoard.tsx            Fetches notes, renders 3 columns
-    NoteColumn.tsx           One column — header, cards, skeleton, empty state
-    NoteCard.tsx             One card — colored, hover animation
+    NoteBoard.tsx              DndContext, DragOverlay, fetches notes, renders columns
+    NoteColumn.tsx             useDroppable + SortableContext — one column
+    NoteCard.tsx               useSortable — one card, edit + delete buttons
   Forms/
-    NoteFormDrawer.tsx       Slide-in right drawer — add note form
+    NoteFormDrawer.tsx         Slide-in drawer — create + edit note
   UI/
-    Header.tsx               Top bar + New Note button
+    Header.tsx                 Top bar + ThemeToggle + New Note button
+    ThemeToggle.tsx            Dark / light mode button
 
 store/
-  store.ts                   Redux store + RootState + AppDispatch
-  notesSlice.ts              State + 4 async thunks + moveNote action
-  hooks.ts                   Typed useAppDispatch / useAppSelector
+  store.ts                     Redux store + RootState + AppDispatch
+  notesSlice.ts                State + 4 async thunks + moveNote + reorderNotes
+  hooks.ts                     Typed useAppDispatch / useAppSelector
+
+context/
+  ThemeContext.tsx             Theme state + useTheme hook
 
 lib/
-  Api.ts                     Axios instance + apiGet/Post/Put/Delete
-  prisma.ts                  Prisma singleton (Phase 2)
+  Api.ts                       Axios instance + apiGet/Post/Put/Delete
+  prisma.ts                    Prisma singleton (Phase 2)
 
 types/
-  index.ts                   Note, NotesState, Column
+  index.ts                     Note, NotesState, Column
 
 prisma/
-  schema.prisma              Note model (Phase 2)
+  schema.prisma                Note model (Phase 2)
+
+__tests__/
+  NoteCard.test.tsx            Renders title + content (with Provider + DndContext)
+  notesSlice.test.ts           moveNote reducer
 ```
 
 ---
@@ -94,71 +120,50 @@ All calls go through `lib/Api.ts` — one Axios instance, one error handler.
 
 ---
 
+## Running Tests
+
+```bash
+yarn test            # run all tests
+yarn test:watch      # re-run on every save
+yarn test:coverage   # with coverage report
+```
+
+---
+
 ## Learning Roadmap
 
-### ✅ Step 1 — Foundation (done)
+### ✅ Step 1 — Foundation
 - Next.js 16 App Router — layouts, pages, route handlers, server vs client components
 - Redux Toolkit — store, slice, async thunks, typed hooks
 - Axios — centralized API layer with error interceptor
 - TypeScript — interfaces, union types, `ReturnType<>`
 - Tailwind CSS v4 — utility classes, animations
 
-### 🔲 Step 2 — Drag & Drop
-- dnd-kit — `DndContext`, `useDraggable`, `useDroppable`, `DragOverlay`
-- Wire to `moveNote` Redux action
+### ✅ Step 2 — Drag & Drop
+- dnd-kit — `DndContext`, `useSortable`, `useDroppable`, `SortableContext`, `DragOverlay`
+- Cross-column move + reorder within column
+- `moveNote` + `reorderNotes` Redux actions
 
-### 🔲 Step 3 — Real Database
+### ✅ Step 3 — Dark / Light Mode
+- Tailwind v4 `@variant dark` — class-based dark mode
+- Context API — `ThemeProvider`, `useTheme`
+- All components updated with `dark:` classes
+
+### ✅ Step 4 — Edit & Delete
+- Delete button on card hover — `window.confirm` + `deleteNote` thunk
+- Edit button on card hover — pre-filled drawer + `updateNote` thunk
+- Prop drilling — `page → NoteBoard → NoteColumn → NoteCard`
+- Mock API module isolation fixed with `globalThis` singleton
+
+### 🔲 Step 5 — Real Database
 - Prisma + SQLite — replace mock API with real queries
 - Full CRUD persisted to disk
 
-### 🔲 Step 4 — Edit & Delete
-- Edit a note in place
-- Delete button on cards
-=======
-## Running Tests
-
-```bash
-yarn test
-yarn test:watch
-yarn test:coverage
-```
-
 ---
 
-## Roadmap
-
-### Week 1 — Skeleton (current)
-- [x] Next.js 16 + TypeScript + Tailwind v4 setup
-- [x] Redux store + notesSlice + typed hooks
-- [x] Context API — dark/light theme
-- [x] Full-screen Kanban board UI
-- [x] Right-side drawer to add notes
-- [x] REST API Route Handlers (mock)
-- [x] Axios API layer
-- [x] Jest skeleton tests
-- [ ] Drag & Drop with dnd-kit *(Day 5)*
-
-### Week 2 — Real Data
-- [ ] Prisma + SQLite persistence
-- [ ] Edit note in place
-- [ ] Full CRUD synced with DB
-
-### Week 3 — Polish
-- [ ] Drag & Drop animations
-- [ ] Mobile responsive layout
-- [ ] Column note count badges
-- [ ] Empty state illustrations
-
-### Week 4 — Production
-- [ ] Full Jest + RTL coverage
-- [ ] Vercel deployment
-- [ ] Add to portfolio crisman.dev
-
----
 ## Screenshot
 
 <img width="1457" height="856" alt="image" src="https://github.com/user-attachments/assets/03a6db3d-ad1e-48ac-a401-07196de35422" />
-
 
 ---
 
@@ -172,3 +177,7 @@ yarn test:coverage
 
 **Cristian Manrique** — Front-End Developer · Designer
 [crisman.dev](https://crisman.dev) · [LinkedIn](https://linkedin.com/in/cristian-manrique)
+
+---
+
+*"The future of design & development is Human + AI"*
