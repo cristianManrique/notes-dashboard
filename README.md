@@ -120,13 +120,15 @@ All calls go through `lib/Api.ts` — one Axios instance, one error handler.
 
 ---
 
-## Running Tests
+## Running Tests (@testing-library/react)
 
 ```bash
 yarn test            # run all tests
 yarn test:watch      # re-run on every save
 yarn test:coverage   # with coverage report
 ```
+
+<img width="281" height="172" alt="image" src="https://github.com/user-attachments/assets/c90926a8-1366-4878-a026-1d1807d1b3fd" />
 
 ---
 
