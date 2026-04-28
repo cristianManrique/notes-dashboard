@@ -171,7 +171,7 @@ yarn test:coverage   # with coverage report
 
 ## Live Demo
 
-[notes-dashboard.vercel.app](https://notes-dashboard.vercel.app) *(coming soon)*
+[notes-dashboard](https://notes-dashboard-demo.netlify.app/)
 
 ---
 
