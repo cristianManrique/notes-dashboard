@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
-    "start": "node scripts/start.js",
+    "start": "concurrently \"next dev\" \"wait-on http://localhost:3000 && cmd /c start http://localhost:3000\"",
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -32,13 +32,15 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
+    "open": "^11.0.0",
+    "open-cli": "^9.0.0",
     "prisma": "^7.7.0",
-    "tailwindcss": "^4",
-    "ts-jest": "^29.4.9",
-    "typescript": "^5"
+    "typescript": "6.0.3",
+    "wait-on": "^9.0.4"
   }
 }
